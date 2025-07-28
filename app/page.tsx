@@ -62,7 +62,7 @@ export default function HomePage() {
       case 0:
         return (
           <StepWelcome
-            onNext={actions.generatePersona}
+            onNext={actions.generatePersonaCandidates}
             isLoading={state.isLoading}
           />
         );
@@ -71,8 +71,10 @@ export default function HomePage() {
         return (
           <StepPersona
             persona={state.persona}
+            personaCandidates={state.personaCandidates}
             onNext={actions.nextStep}
             onPrev={actions.prevStep}
+            onSelectPersona={actions.selectPersona}
             isLoading={state.isLoading}
           />
         );

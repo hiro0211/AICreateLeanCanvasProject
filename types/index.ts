@@ -7,6 +7,21 @@ export interface Persona {
   behaviors: string[];
 }
 
+// Difyから返される新しいペルソナ候補の型
+export interface DifyPersonaCandidate {
+  id: number;
+  description: string;
+  needs: {
+    explicit: string;
+    implicit: string;
+  };
+}
+
+// Difyのペルソナ生成レスポンスの型
+export interface DifyPersonaResponse {
+  personas: DifyPersonaCandidate[];
+}
+
 export interface BusinessIdea {
   concept: string;
   targetMarket: string;
@@ -37,6 +52,7 @@ export interface GeneratorState {
   currentStep: number;
   steps: GeneratorStep[];
   persona: Persona | null;
+  personaCandidates: DifyPersonaCandidate[];
   businessIdea: BusinessIdea | null;
   canvasData: CanvasData | null;
   isLoading: boolean;
@@ -44,23 +60,22 @@ export interface GeneratorState {
 }
 
 export type GeneratorAction =
-  | { type: 'SET_STEP'; payload: number }
-  | { type: 'SET_PERSONA'; payload: Persona }
-  | { type: 'SET_BUSINESS_IDEA'; payload: BusinessIdea }
-  | { type: 'SET_CANVAS_DATA'; payload: CanvasData }
-  | { type: 'SET_LOADING'; payload: boolean }
-  | { type: 'SET_ERROR'; payload: string | null }
-  | { type: 'COMPLETE_STEP'; payload: number }
-  | { type: 'RESET' };
+  | { type: "SET_STEP"; payload: number }
+  | { type: "SET_PERSONA"; payload: Persona }
+  | { type: "SET_PERSONA_CANDIDATES"; payload: DifyPersonaCandidate[] }
+  | { type: "SET_BUSINESS_IDEA"; payload: BusinessIdea }
+  | { type: "SET_CANVAS_DATA"; payload: CanvasData }
+  | { type: "SET_LOADING"; payload: boolean }
+  | { type: "SET_ERROR"; payload: string | null }
+  | { type: "COMPLETE_STEP"; payload: number }
+  | { type: "RESET" };
 
 export interface DifyApiRequest {
-  inputs: {
-    persona?: Persona;
-    businessIdea?: BusinessIdea;
-    step?: string;
-  };
-  response_mode: 'blocking';
+  inputs: Record<string, any>;
+  query: string;
+  response_mode: "blocking" | "streaming";
   user: string;
+  conversation_id?: string;
 }
 
 export interface DifyApiResponse {
